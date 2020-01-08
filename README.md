@@ -1,1 +1,1 @@
-jira-server maintance start
+jira/confluence server maintance
