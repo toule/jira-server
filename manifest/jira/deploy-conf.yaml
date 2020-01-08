@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: work
+  name: confluence-deploy
+  labels:
+    app: confuence-dev
+    company: atlassian
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: confluence
+  template:
+    metadata:
+      labels:
+        app: confluence
+    spec:
+      containers:
+      - image: atlassian/confluence-server:latest
+        name: confluence-img
+        ports:
+        - containerPort: 8090
+          name: http
+          protocol: TCP
+#        resources:
+#          requests:
+#            cpu: "50m"
+#            memory: "3500Mi"
+#          limits:
+#            cpu: "100m"
+#            memory: "4000Mi"
+#        livenessProbe:
+#          httpGet:
+#            port: 8080
+#          initialDelaySeconds: 10
+#          timeoutSeconds: 10
+#          periodSeconds: 100
+#          failureThreshold: 3
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: alpha.eksctl.io/nodegroup-name
+                operator: In
+                values:
+                - ng-worker-main

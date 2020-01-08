@@ -1,0 +1,11 @@
+{
+    "Tags": [
+        {
+            "ResourceId": "eks-f2b7a327-ba0e-214b-d19c-e7bd21116285", 
+            "ResourceType": "auto-scaling-group", 
+            "Key": "workload", 
+            "Value": "Server-WorkNode", 
+            "PropagateAtLaunch": true
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+{
+    "clusterName": "eks-test", 
+    "nodegroupName": "metric", 
+    "labels": {
+        "addOrUpdateLabels": {
+            "KeyName": "Metric"
+        }
+    } 
+}

@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: work
+  name: postgresconfsvc
+  labels:
+    app: postgresconfsvc
+spec:
+  type: NodePort
+  ports:
+  - port: 5432
+    name: postgresconf
+  selector:
+    app: postgresconf
+
+---
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  namespace: work
+  name: postgresconf
+spec:
+  serviceName: postgresconfsvc
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgresconf
+  template:
+    metadata:
+      labels:
+        app: postgresconf
+    spec:
+      containers:
+      - name: postgres
+        image: postgres:9.6
+        envFrom:
+          - configMapRef:
+              name: postgres-configmap-conf
+          - secretRef:
+              name: postgres-secret-conf
+        ports:
+        - containerPort: 5432
+          name: postgredb
+        volumeMounts:
+        - name: postgredb
+          mountPath: /var/lib/postgresql/data
+          subPath: postgres
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: alpha.eksctl.io/nodegroup-name
+                operator: In
+                values:
+                - ng-worker-db
+  volumeClaimTemplates:
+  - metadata:
+      name: postgredb
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: gp2
+      resources:
+        requests:
+          storage: 40Gi
