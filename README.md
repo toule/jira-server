@@ -1,1 +1,1 @@
-jira-server maintance
+jira-server maintance start
