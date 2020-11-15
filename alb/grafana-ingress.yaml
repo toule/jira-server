@@ -1,0 +1,20 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: grafana-monitor-alb
+  namespace: cattle-monitoring-system 
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    external-dns.alpha.kubernetes.io/hostname: grafana.rayhli.com
+    alb.ingress.kubernetes.io/target-type: instance
+  labels:
+    app: jira-grafana-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: rancher-monitoring-grafana
+          servicePort: 80

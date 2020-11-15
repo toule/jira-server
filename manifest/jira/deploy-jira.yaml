@@ -17,19 +17,19 @@ spec:
         app: jira
     spec:
       containers:
-      - image: atlassian/jira-software:8
+      - image: atlassian/jira-software:8.6.0
         name: jira-img
         ports:
         - containerPort: 8080
           name: http
           protocol: TCP
-#        resources:
-#          requests:
-#            cpu: "50m"
-#            memory: "3500Mi"
-#          limits:
-#            cpu: "100m"
-#            memory: "4000Mi"
+        resources:
+          requests:
+            cpu: "1.2"
+            memory: "4000Mi"
+          limits:
+            cpu: "1.2"
+            memory: "4000Mi"
 #        livenessProbe:
 #          httpGet:
 #            port: 8080

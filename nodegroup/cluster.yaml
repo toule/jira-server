@@ -1,0 +1,34 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: jira
+  region: ap-northeast-1
+  version: '1.17'
+
+iam:
+  withOIDC: true
+
+vpc:
+#  id: vpc-011a2ed795ef64449
+#  subnets:
+#    public:
+#      ap-northeast-2a:
+#        id: "subnet-0eb73cc3a3724e921"
+#      ap-northeast-2c:
+#        id: "subnet-001b7f53203eca3de"
+#    private:
+#      ap-northeast-2a:
+#        id: "subnet-0c84b69a07e7a5165"
+#      ap-northeast-2c:
+#        id: "subnet-0978b7be006be813b"
+  nat:
+    gateway: Single #Disable/Single/HighlyAvailable #exit vpc not working
+
+cloudWatch:
+  clusterLogging:
+    enableTypes: ["api", "audit", "authenticator", "controllerManager", "scheduler"] # support *, all
+
+#secretsEncryption:
+  # ARN of the KMS key
+#  keyARN: "arn:aws:kms:ap-northeast-2:264594923212:key/a1cf2c42-f1d4-4305-bcf9-3899ac30dbdc"

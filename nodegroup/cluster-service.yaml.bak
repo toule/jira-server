@@ -5,10 +5,11 @@ metadata:
   name: jira
   region: ap-northeast-1
 
-nodeGroups:
+managedNodeGroups:
 - name: ng-worker-main
-  availabilityZones: ["ap-northeast-1a", "ap-northeast-1c", "ap-northeast-1d"] ##Certain VPC Subnet
+  availabilityZones: ["ap-northeast-1a", "ap-northeast-1d"] ##Certain VPC Subnet
   labels: { role: workers }
+  instanceType: m5a.large
   privateNetworking: true
   volumeSize: 100
   volumeType: gp2
@@ -27,9 +28,3 @@ nodeGroups:
       externalDNS: true
       certManager: true
 #      appMesh: true
-  instancesDistribution:
-    maxPrice: 0.15
-    instanceTypes: ["m5a.xlarge","m5a.2xlarge"] # At least one instance type should be specified
-    onDemandBaseCapacity: 0
-    onDemandPercentageAboveBaseCapacity: 0
-    spotAllocationStrategy: "capacity-optimized"

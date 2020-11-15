@@ -23,13 +23,13 @@ spec:
         - containerPort: 8090
           name: http
           protocol: TCP
-#        resources:
-#          requests:
-#            cpu: "50m"
-#            memory: "3500Mi"
-#          limits:
-#            cpu: "100m"
-#            memory: "4000Mi"
+        resources:
+          requests:
+            cpu: "1.5"
+            memory: "8000Mi"
+          limits:
+            cpu: "1.5"
+            memory: "8000Mi"
 #        livenessProbe:
 #          httpGet:
 #            port: 8080

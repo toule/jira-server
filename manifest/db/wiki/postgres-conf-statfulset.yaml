@@ -2,16 +2,16 @@ apiVersion: v1
 kind: Service
 metadata:
   namespace: work
-  name: postgressvc
+  name: postgresconfsvc
   labels:
-    app: postgressvc
+    app: postgresconfsvc
 spec:
   type: NodePort
   ports:
   - port: 5432
-    name: postgres
+    name: postgresconf
   selector:
-    app: postgres
+    app: postgresconf
 
 ---
 
@@ -19,26 +19,26 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   namespace: work
-  name: postgres
+  name: postgresconf
 spec:
-  serviceName: postgressvc
+  serviceName: postgresconfsvc
   replicas: 1
   selector:
     matchLabels:
-      app: postgres
+      app: postgresconf
   template:
     metadata:
       labels:
-        app: postgres
+        app: postgresconf
     spec:
       containers:
       - name: postgres
-        image: postgres:10
+        image: postgres:9.6
         envFrom:
           - configMapRef:
-              name: postgres-configmap
+              name: postgres-configmap-conf
           - secretRef:
-              name: postgres-secret
+              name: postgres-secret-conf
         ports:
         - containerPort: 5432
           name: postgredb
@@ -54,7 +54,7 @@ spec:
               - key: alpha.eksctl.io/nodegroup-name
                 operator: In
                 values:
-                - ng-worker-db  
+                - ng-worker-db
   volumeClaimTemplates:
   - metadata:
       name: postgredb
@@ -63,4 +63,4 @@ spec:
       storageClassName: gp2
       resources:
         requests:
-          storage: 40Gi
+          storage: 50Gi

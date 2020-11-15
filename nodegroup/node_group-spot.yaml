@@ -1,0 +1,37 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+
+metadata:
+  name: k8s-demo
+  region: ap-northeast-2
+
+nodeGroups:
+  - name: spot-ng-1
+    amiFamily: AmazonLinux2 #Bottlerocket managed not working
+    minSize: 2
+    maxSize: 5
+    volumeSize: 30
+    labels:
+      Name: ng-worker
+      role: worker
+    ssh:
+      allow: true #Default
+      publicKeyName: keypair #Exist Keypair
+    tags:
+      nodegroup-role: worker
+      Name: Dev
+    iam:
+      withAddonPolicies:
+        albIngress: true
+        cloudWatch: true
+        autoScaler: true
+        externalDNS: true
+        certManager: true
+        appMesh: true
+    privateNetworking: true
+    instancesDistribution:
+      maxPrice: 0.018
+      instanceTypes: ["t3.small", "t3.medium"] # At least one instance type should be specified
+      onDemandBaseCapacity: 0
+      onDemandPercentageAboveBaseCapacity: 50
+      spotInstancePools: 2

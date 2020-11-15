@@ -1,0 +1,65 @@
+{
+    "apiVersion": "v1",
+    "items": [
+        {
+            "apiVersion": "extensions/v1beta1",
+            "kind": "Ingress",
+            "metadata": {
+                "annotations": {
+                    "alb.ingress.kubernetes.io/scheme": "internet-facing",
+                    "alb.ingress.kubernetes.io/target-type": "ip",
+                    "external-dns.alpha.kubernetes.io/hostname": "kibana.rayhli.com",
+                    "field.cattle.io/publicEndpoints": "[{\"addresses\":[\"\"],\"port\":443,\"protocol\":\"HTTPS\",\"serviceName\":\"logging:kibana-http\",\"ingressName\":\"logging:kibana-alb\",\"path\":\"/*\",\"allNodes\":false},{\"addresses\":[\"\"],\"port\":80,\"protocol\":\"HTTP\",\"serviceName\":\"logging:kibana-http\",\"ingressName\":\"logging:kibana-alb\",\"path\":\"/*\",\"allNodes\":false}]",
+                    "kubectl.kubernetes.io/last-applied-configuration": "{\"apiVersion\":\"extensions/v1beta1\",\"kind\":\"Ingress\",\"metadata\":{\"annotations\":{\"alb.ingress.kubernetes.io/scheme\":\"internet-facing\",\"alb.ingress.kubernetes.io/target-type\":\"ip\",\"external-dns.alpha.kubernetes.io/hostname\":\"kibana.rayhli.com\",\"kubernetes.io/ingress.class\":\"alb\"},\"labels\":{\"app\":\"jira-kibana-ingress\"},\"name\":\"kibana-alb\",\"namespace\":\"logging\"},\"spec\":{\"rules\":[{\"http\":{\"paths\":[{\"backend\":{\"serviceName\":\"kibana-http\",\"servicePort\":80},\"path\":\"/*\"}]}}]}}\n",
+                    "kubernetes.io/ingress.class": "alb"
+                },
+                "creationTimestamp": "2020-11-12T15:11:11Z",
+                "deletionGracePeriodSeconds": 0,
+                "deletionTimestamp": "2020-11-12T15:19:34Z",
+                "finalizers": [
+                    "ingress.k8s.aws/resources"
+                ],
+                "generation": 2,
+                "labels": {
+                    "app": "jira-kibana-ingress"
+                },
+                "name": "kibana-alb",
+                "namespace": "logging",
+                "resourceVersion": "530092",
+                "selfLink": "/apis/extensions/v1beta1/namespaces/logging/ingresses/kibana-alb",
+                "uid": "b18e5ede-74dc-4da1-acbd-c17b340c32d2"
+            },
+            "spec": {
+                "rules": [
+                    {
+                        "http": {
+                            "paths": [
+                                {
+                                    "backend": {
+                                        "serviceName": "kibana-http",
+                                        "servicePort": 80
+                                    },
+                                    "path": "/*"
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "status": {
+                "loadBalancer": {
+                    "ingress": [
+                        {
+                            "hostname": "k8s-logging-kibanaal-d7d49112ce-592474944.ap-northeast-1.elb.amazonaws.com"
+                        }
+                    ]
+                }
+            }
+        }
+    ],
+    "kind": "List",
+    "metadata": {
+        "resourceVersion": "",
+        "selfLink": ""
+    }
+}

@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: kibana-alb
+#  namespace: cattle-monitoring-system
+  namespace: logging
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    external-dns.alpha.kubernetes.io/hostname: kibana.rayhli.com
+    alb.ingress.kubernetes.io/target-type: ip
+  labels:
+    app: jira-kibana-ingress
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /*
+        backend:
+          serviceName: efk-kibana
+          servicePort: 5601

@@ -50,7 +50,7 @@ livenessProbe:
 
 image:
   repository: grafana/grafana
-  tag: 6.5.2
+  tag: 7.2.2
   pullPolicy: IfNotPresent
 
   ## Optionally specify an array of imagePullSecrets.
@@ -153,7 +153,7 @@ resources: {}
 ## ref: https://kubernetes.io/docs/user-guide/node-selection/
 #
 nodeSelector: {
-  kubernetes.io/hostname: ip-192-168-97-84.ap-northeast-1.compute.internal
+  kubernetes.io/hostname: ip-192-168-143-113.ap-northeast-1.compute.internal
 }
 
 ## Tolerations for pod assignment

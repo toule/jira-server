@@ -1,68 +1,72 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: externaldnsserviceaccount
-
+  name: external-dns
+  # If you're using Amazon EKS with IAM Roles for Service Accounts, specify the following annotation.
+  # Otherwise, you may safely omit it.
+#  annotations:
+    # Substitute your account ID and IAM service role name below.
+#    eks.amazonaws.com/role-arn: arn:aws:iam::ACCOUNT-ID:role/IAM-SERVICE-ROLE-NAME
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRole
 metadata:
-  name: externaldnsrole
+  name: external-dns
 rules:
 - apiGroups: [""]
-  resources: ["services"]
+  resources: ["services","endpoints","pods"]
   verbs: ["get","watch","list"]
-- apiGroups: [""]
-  resources: ["pods"]
-  verbs: ["get","watch","list"]
-- apiGroups: ["extensions"]
+- apiGroups: ["extensions","networking.k8s.io"]
   resources: ["ingresses"]
   verbs: ["get","watch","list"]
 - apiGroups: [""]
   resources: ["nodes"]
   verbs: ["list","watch"]
-
 ---
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
-  name: externaldnsbind
+  name: external-dns-viewer
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: externaldnsrole
+  name: external-dns
 subjects:
 - kind: ServiceAccount
-  name: externaldnsserviceaccount
+  name: external-dns
   namespace: default
-
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: externaldnsdep
+  namespace: default
+  name: external-dns
 spec:
   strategy:
     type: Recreate
   selector:
     matchLabels:
-      app: externaldns
+      app: external-dns
   template:
     metadata:
       labels:
-        app: externaldns
+        app: external-dns
+      # If you're using kiam or kube2iam, specify the following annotation.
+      # Otherwise, you may safely omit it.
+#      annotations:
+#        iam.amazonaws.com/role: arn:aws:iam::ACCOUNT-ID:role/IAM-SERVICE-ROLE-NAME
     spec:
-      serviceAccountName: externaldnsserviceaccount
+      serviceAccountName: external-dns
       containers:
-      - name: externaldnsimage
-        image: registry.opensource.zalan.do/teapot/external-dns:latest
+      - name: external-dns
+        image: k8s.gcr.io/external-dns/external-dns:v0.7.3
         args:
         - --source=service
         - --source=ingress
-        - --domain-filter=rayhli.com # will make ExternalDNS see only the hosted zones matching provided domain, omit to process all available hosted zones
+        - --domain-filter=rayhli.com. # will make ExternalDNS see only the hosted zones matching provided domain, omit to process all available hosted zones
         - --provider=aws
         - --policy=upsert-only # would prevent ExternalDNS from deleting any records, omit to enable full synchronization
-        - --aws-zone-type=public # only look at public hosted zones (valid values are public, private or no valuefor both)
+        - --aws-zone-type=public # only look at public hosted zones (valid values are public, private or no value for both)
         - --registry=txt
         - --txt-owner-id=/hostedzone/Z19KCRHJVSTTAB
       securityContext:

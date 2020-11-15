@@ -6,7 +6,7 @@ metadata:
   region: ap-northeast-1
 
 nodeGroups:
-- name: ng-worker-main
+- name: ng-worker-addon
   availabilityZones: ["ap-northeast-1a", "ap-northeast-1c", "ap-northeast-1d"] ##Certain VPC Subnet
   labels: { role: workers }
   privateNetworking: true
@@ -28,7 +28,7 @@ nodeGroups:
       certManager: true
 #      appMesh: true
   instancesDistribution:
-    maxPrice: 0.15
+    maxPrice: 0.1
     instanceTypes: ["m5a.xlarge","m5a.2xlarge"] # At least one instance type should be specified
     onDemandBaseCapacity: 0
     onDemandPercentageAboveBaseCapacity: 0
