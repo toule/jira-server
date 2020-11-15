@@ -6,10 +6,9 @@ metadata:
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
-    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80, "HTTPS":443}]'
-    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:ap-northeast-1:264594923212:certificate/44e134d9-bb4c-4dce-918c-f26b0df80521
-    alb.ingress.kubernetes.io/actions.ssl-redirect: '{"Type": "redirect", "RedirectConfig": { "Protocol": "HTTPS", "Port": "443", "StatusCode": "HTTP_301"}}'
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
     external-dns.alpha.kubernetes.io/hostname: jira.rayhli.com
+#    alb.ingress.kubernetes.io/backend-protocol: HTTP
     alb.ingress.kubernetes.io/target-type: instance
 #    alb.ingress.kubernetes.io/healthcheck-path: '/'
   labels:
@@ -18,10 +17,6 @@ spec:
   rules:
   - http:
       paths:
-      - path: /*
-        backend:
-          serviceName: ssl-redirect
-          servicePort: use-annotation
       - path: /*
         backend:
           serviceName: jira-svc
